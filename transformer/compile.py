@@ -49,7 +49,7 @@ def generate_transformer_embedders_model(transformer, height, width, max_sequenc
     builder.add(key="embedders",
                 model_instance=BaseModelInstance(partial(model.TracingTransformerEmbedderWrapper, time_text_embed=transformer.time_text_embed, pos_embed=transformer.pos_embed, is_distributed=True), input_output_aliases={}),
                 example_inputs=[sample_inputs],
-                compiler_args="""--target=trn1 --model-type=transformer --lnc=2 -O1 --tensorizer-options='--run-pg-layout-and-tiling'""")
+                compiler_args="""--target=trn2 --model-type=transformer --lnc=2 -O1 --tensorizer-options='--run-pg-layout-and-tiling'""")
 
     traced_model = builder.trace(initialize_model_weights=False)
     compiled_model_path = os.path.join(COMPILER_WORKDIR_ROOT,
@@ -86,7 +86,7 @@ def generate_transformer_blocks_model(transformer, height, width, max_sequence_l
     builder.add(key="blocks",
                 model_instance=BaseModelInstance(partial(model.TracingTransformerBlockWrapper, transformer=transformer, transformerblock=transformer.transformer_blocks, is_distributed=True), input_output_aliases={}),
                 example_inputs=[sample_inputs],
-                compiler_args="""--target=trn1 --model-type=transformer --lnc=2 -O1 --tensorizer-options='--run-pg-layout-and-tiling'""")
+                compiler_args="""--target=trn2 --model-type=transformer --lnc=2 -O1 --tensorizer-options='--run-pg-layout-and-tiling'""")
 
     traced_model = builder.trace(initialize_model_weights=False)
     compiled_model_path = os.path.join(COMPILER_WORKDIR_ROOT,
@@ -121,7 +121,7 @@ def generate_transformer_single_blocks_model(transformer, height, width, max_seq
     builder.add(key="single_blocks",
                 model_instance=BaseModelInstance(partial(model.TracingSingleTransformerBlockWrapper, transformer=transformer, transformerblock=transformer.single_transformer_blocks, is_distributed=True), input_output_aliases={}),
                 example_inputs=[sample_inputs],
-                compiler_args="""--target=trn1 --model-type=transformer --lnc=2 -O1 --tensorizer-options='--run-pg-layout-and-tiling'""")
+                compiler_args="""--target=trn2 --model-type=transformer --lnc=2 -O1 --tensorizer-options='--run-pg-layout-and-tiling'""")
 
     traced_model = builder.trace(initialize_model_weights=False)
     compiled_model_path = os.path.join(COMPILER_WORKDIR_ROOT,
@@ -156,7 +156,7 @@ def generate_transformer_out_layers_model(transformer, height, width, max_sequen
     builder.add(key="out_layers",
                 model_instance=BaseModelInstance(partial(model.TracingTransformerOutLayerWrapper, norm_out=transformer.norm_out, proj_out=transformer.proj_out), input_output_aliases={}),
                 example_inputs=[sample_inputs],
-                compiler_args="""--target=trn1 --model-type=transformer --lnc=2 -O1 --tensorizer-options='--run-pg-layout-and-tiling'""")
+                compiler_args="""--target=trn2 --model-type=transformer --lnc=2 -O1 --tensorizer-options='--run-pg-layout-and-tiling'""")
 
     traced_model = builder.trace(initialize_model_weights=False)
     torch.jit.save(traced_model, os.path.join(COMPILER_WORKDIR_ROOT,
